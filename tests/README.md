@@ -69,3 +69,23 @@ Diagrama de Classes
 [Diagrama de Classes](https://drive.google.com/file/d/1HZtNrspCazUbyUYHR2VsJvM8-2e_AMsF/view?usp=drive_link)
 
 
++------------------+
+ banco de dados 
++------------------+
+
+-cria a tabela se não existir
+-salva cada tarefa nova
+-puxa todas as tarefas do banco
+-busca tarefa pelo ID
+-converte os dados do banco de volta pros objetos Tarefa
+
+Tabela:
+-id chave primaria
+-titulo
+-descricao
+-prioridade
+-concluida 
+-data
+
+
+
