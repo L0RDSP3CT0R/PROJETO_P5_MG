@@ -2,13 +2,9 @@ from models import Tarefa
 from patterns import OrdenarPorData, OrdenarPorPrioridade, OrdenarPorStatus
 from repositorio_tarefas import RepositorioTarefas
 
-
-
 # GERENCIA AS TAREFAS (SINGLETON)
 class GerenciadorDeTarefas:
     _instancia = None
-
-
 
     def __new__(cls):
         if not cls._instancia:
@@ -17,36 +13,30 @@ class GerenciadorDeTarefas:
             cls._instancia.estrategia = OrdenarPorData()
         return cls._instancia
 
-
-# ADICIONA TAREFA
+    # ADICIONA TAREFA
     def adicionar(self, tarefa):
         self.repo.adicionar(tarefa)
 
-
- # LISTA TAREFAS
+    # LISTA TAREFAS
     def listar(self):
         tarefas = self.estrategia.ordenar(self.repo.listar())
         if not tarefas:
             print("Nenhuma tarefa ainda.")
             return
-        for i, t in enumerate(tarefas):
-            print(f"[{i}] {t}")
+        for t in tarefas:
+            print(f"[{t.id}] {t}")
 
-
- # CONCLUI TAREFA PELO ID
+    # CONCLUI TAREFA PELO ID
     def concluir(self, indice):
-        tarefa = self.repo.buscar(indice)
-        if tarefa:
-            tarefa.concluir()
-            print("Tarefa marcada como concluida!")
+        ok = self.repo.marcar_concluida(indice)
+        if ok:
+            print("Tarefa marcada como concluída!")
         else:
-            print("Tarefa não encontrada.")
+            print("Erro: tarefa não encontrada.")
 
-
- # MUDA O MODO DE ORDENAR
+    # MUDA O MODO DE ORDENAR
     def mudar_estrategia(self, nova):
         self.estrategia = nova
-
 
 
 # FUNÇÃO PRINCIPAL
@@ -66,14 +56,30 @@ def menu():
         if op == "1":
             t = input("Título: ")
             d = input("Descrição: ")
-            p = int(input("Prioridade (1-5): "))
+
+            # TRATAMENTO DE ERRO AQUI ↓↓↓
+            try:
+                p = int(input("Prioridade (1-5): "))
+            except:
+                print("Valor inválido, usando prioridade 1.")
+                p = 1
+
             g.adicionar(Tarefa(t, d, p))
             print("Tarefa adicionada.")
+
         elif op == "2":
             g.listar()
+
         elif op == "3":
-            i = int(input("Número da tarefa: "))
+            # TRATAMENTO DE ERRO AQUI ↓↓↓
+            try:
+                i = int(input("Número da tarefa: "))
+            except:
+                print("ID inválido.")
+                continue
+
             g.concluir(i)
+
         elif op == "4":
             print("1- Data  2- Prioridade  3- Status")
             esc = input("Escolha: ")
@@ -81,12 +87,13 @@ def menu():
             elif esc == "2": g.mudar_estrategia(OrdenarPorPrioridade())
             elif esc == "3": g.mudar_estrategia(OrdenarPorStatus())
             print("Modo de ordenação trocado.")
+
         elif op == "0":
             print("Saindo...")
             break
         else:
             print("Opção inválida.")
-            
+
 
 if __name__ == "__main__":
     menu()

@@ -54,7 +54,7 @@ class RepositorioTarefas:
         # CRIANDO OS OBJETOS DE VOLTA
         for l in dados:
             t = Tarefa(l[1], l[2], l[3])
-            t._concluida = bool(l[4])
+            t.id = l[0]  # ID do banco
 
             # SÓ PRA NÃO QUEBRAR CASO A DATA VENHA ZOADA
             try:
@@ -84,3 +84,11 @@ class RepositorioTarefas:
             t._data_criacao = datetime.now()
 
         return t
+
+    def marcar_concluida(self, id):
+        try:
+            self.cursor.execute("UPDATE tarefas SET concluida = 1 WHERE id = ?", (id,))
+            self.conn.commit()
+            return True
+        except:
+            return False

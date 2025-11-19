@@ -8,6 +8,27 @@ class Tarefa:
         self._prioridade = prioridade
         self._concluida = False
         self._data_criacao = datetime.now()
+
+    @property
+    def titulo(self):
+        return self._titulo
+
+    @property
+    def descricao(self):
+        return self._descricao
+
+    @property
+    def prioridade(self):
+        return self._prioridade
+
+    @property
+    def concluida(self):
+        return self._concluida
+
+    @property
+    def data_criacao(self):
+        return self._data_criacao
+
 #FUNÇÃO CONCLUIR TAREFA
     def concluir(self):
         self._concluida = True
